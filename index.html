@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>DeepLearningAI</title>
+    <meta charset="utf-8"/>
+    <style>
+      
+    </style>
+    
+  </head>
+
+  <body>
+
+    <div id="divmaincontainer">
+
+      <header>
+        
+      </header>
+
+      <nav>
+        
+      </nav>
+
+      <div id="maincontent">
+
+        <script>
+
+          const owner = 'schirambira';
+          const repo = 'DeepLearningAI';
+          const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/`;
+          
+          fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+              const fileList = document.getElementById('file-list');
+              data.forEach(file => {
+                if (file.type === 'file') {
+                  const listItem = document.createElement('li');
+                  const link = document.createElement('a');
+                  link.href = file.html_url; // Link to GitHub file view
+                  link.textContent = file.name;
+                  listItem.appendChild(link);
+                  fileList.appendChild(listItem);
+                }
+              });
+            })
+            .catch(error => console.error('Error:', error));
+          
+        </script>
+        
+      </div>
+      
+    </div>
+    
+  </body>
+</html>
