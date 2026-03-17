@@ -25,27 +25,34 @@
 
         <script>
 
-          const owner = 'schirambira';
-          const repo = 'DeepLearningAI';
-          const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/`;
-          const apiUrl = `https://schirambira.github.io/DeepLearningAI/`;
+          const repoOwner = 'schirambira';
+          const repoName = 'DeepLearningAI';
+          const branch = 'main'; // or 'master'
+          const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/`;
           
-          fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-              const fileList = document.getElementById('file-list');
-              data.forEach(file => {
-                if (file.type === 'file') {
-                  const listItem = document.createElement('li');
-                  const link = document.createElement('a');
-                  link.href = file.html_url; // Link to GitHub file view
-                  link.textContent = file.name;
-                  listItem.appendChild(link);
-                  fileList.appendChild(listItem);
-                }
-              });
-            })
-            .catch(error => console.error('Error:', error));
+          async function getGithubFiles() {
+              try {
+                  const response = await fetch(apiUrl);
+                  const files = await response.json();
+                  const listContainer = document.getElementById('file-list');
+          
+                  files.forEach(file => {
+                      // We only want to link to actual files (skip directories)
+                      if (file.type === 'file') {
+                          const link = document.createElement('a');
+                          
+                          // Link to the raw file or the GitHub view page
+                          link.href = file.html_url; 
+                          link.textContent = file.name;
+                          link.style.display = 'block'; // Put each link on a new line
+                          
+                          listContainer.appendChild(link);
+                      }
+                  });
+              } catch (error) {
+                  console.error('Error fetching files:', error);
+              }
+          }
           
         </script>
         
