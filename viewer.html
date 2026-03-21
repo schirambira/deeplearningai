@@ -38,6 +38,8 @@
         //call
         document.addEventListener('DOMContentLoaded', () => {
             const file_url = GetParameter('file');
-            document.querySelector("#file_viewer").src = file_url;
+            // The replace() method with a regular expression is an efficient way to get the filename portion
+            const filenameWithExt = file_url.replace(/^.*[\\\/]/, '');
+            document.querySelector("#file_viewer").src = filenameWithExt;
         });
 </script> 
