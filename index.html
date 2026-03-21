@@ -55,7 +55,7 @@
                       // We only want to link to actual files (skip directories)
                       if (file.type === 'file') {
 
-                          const blockedfiles = ['html', 'jasper', 'rtf'];
+                          const blockedfiles = ['html', 'md', 'rtf'];
                           if (! blockedfiles.includes( getFileExtension(file.name) )) { //if (! blockedfiles.indexOf(fileToCheck) > -1) {  //skip blocked files
                               
                               const link = document.createElement('a');
