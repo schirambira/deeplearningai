@@ -60,7 +60,7 @@
                           link.href = file.html_url; 
                           link.textContent = file.name;
                           link.style.display = 'block'; // Put each link on a new line
-                          link.onclick = "return; alert(0);";
+                          link.onclick = "return false; alert(0);";
                           
                           listContainer.appendChild(link);
                       }
