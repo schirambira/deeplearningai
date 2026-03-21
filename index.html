@@ -57,10 +57,17 @@
                           const link = document.createElement('a');
                           
                           // Link to the raw file or the GitHub view page
-                          //link.href = file.html_url; 
+                          link.href = file.html_url; 
                           link.textContent = file.name;
                           link.style.display = 'block'; // Put each link on a new line
-                          link.onclick = "return false; alert(0);";
+                          
+
+                          // CRITICAL: This opens the file in a new tab
+                          link.target = '_blank'; 
+                        
+                          // Security best practice when using target="_blank"
+                          link.rel = 'noopener noreferrer'; 
+                        
                           
                           listContainer.appendChild(link);
                       }
