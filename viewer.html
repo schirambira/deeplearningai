@@ -1,25 +1,35 @@
 <!-- HTML: Define the iframe container in your body -->
-<iframe id="pdf-viewer" src="" width="100%" height="600px" style="border: none;" title="Embedded PDF Viewer">
+<iframe id="file_viewer" src="" width="100%" height="600px" style="border: none;" title="Embedded PDF Viewer">
   <p>This browser does not support PDFs. Please download the PDF to view it: <a href="document.pdf">Download PDF</a></p>
 </iframe>
 
 
 <script>
-  // Assume the current URL is: https://www.example.com
-  
-  // 1. Get the full query string (e.g., "?file=report.pdf&user=admin")
-  const queryString = window.location.search;
-  
-  // 2. Create a URLSearchParams object
-  const urlParams = new URLSearchParams(queryString);
-  
-  // 3. Get the value of a specific parameter, e.g., 'file'
-  const fileName = urlParams.get('file');
-  
-  console.log(fileName); // Output: "report.pdf"
-  
-  // You can also check if a parameter exists using .has()
-  if (urlParams.has('file')) {
-      console.log('User parameter exists.');
-  }
+
+    function GetParameter(var param){
+        // Assume the current URL is: https://www.example.com
+        
+        // 1. Get the full query string (e.g., "?file=report.pdf&user=admin")
+        const queryString = window.location.search;
+        
+        // 2. Create a URLSearchParams object
+        const urlParams = new URLSearchParams(queryString);
+        
+        // 3. Get the value of a specific parameter, e.g., 'file'
+        const file_url = urlParams.get(param);
+        
+        console.log(fileName); // Output: "report.pdf"
+        
+        // You can also check if a parameter exists using .has()
+        if (urlParams.has(param)) {
+            console.log('User parameter exists.');
+        }
+      return file_url;
+    }
+
+        //call
+        document.addEventListener('DOMContentLoaded', () => {
+            var file_url = GetParameter('file');
+          document.querySelector("file_viewer").src = file_url;
+        });
 </script> 
