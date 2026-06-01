@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  /* Basic Tree Structure */
+  .tree { display: flex; flex-direction: column; align-items: center; }
+  .tree ul { padding-top: 20px; position: relative; display: flex; justify-content: center; }
+  .tree li { float: left; text-align: center; list-style-type: none; position: relative; padding: 20px 5px; }
+
+  /* Rectangular Nodes */
+  .node { border: 1px solid #ccc; padding: 10px; display: inline-block; border-radius: 4px; background: white; cursor: pointer; min-width: 80px; }
+  .node:hover { background: #f0f0f0; }
+
+  /* Vertical and Horizontal Connecting Lines */
+  .tree li::before, .tree li::after { content: ''; position: absolute; top: 0; right: 50%; border-top: 1px solid #ccc; width: 50%; height: 20px; }
+  .tree li::after { right: auto; left: 50%; border-left: 1px solid #ccc; }
+  .tree li:only-child::after, .tree li:only-child::before { display: none; }
+  .tree li:only-child { padding-top: 0; }
+  .tree li:first-child::before, .tree li:last-child::after { border: 0 none; }
+  .tree li:last-child::before { border-right: 1px solid #ccc; border-radius: 0 5px 0 0; }
+  .tree li:first-child::after { border-radius: 5px 0 0 0; }
+  .tree ul ul::before { content: ''; position: absolute; top: 0; left: 50%; border-left: 1px solid #ccc; width: 0; height: 20px; }
+</style>
+</head>
+<body>
+
+<div id="tree-root" class="tree"></div>
+
+<script>
+  // Data Driven Object -- TEMPLATE DATA -- REPLACE WITH YOUR OWN DATA
+  const treeDatax = {
+    name: "Root",
+    children: [
+      { name: "Child A", children: [{ name: "Grandchild A1" }, { name: "Grandchild A2" }, { name: "Grandchild A3" }] },
+      { name: "Child B", children: [{ name: "Grandchild B1" }, { name: "Grandchild B2", children: [{ name: "Great-Grandchild B2a" }, { name: "Great-Grandchild B2b" }, { name: "Great-Grandchild B2c" }] }, { name: "Grandchild B3" }] },
+      { name: "Child C", children: [{ name: "Grandchild C1" }, { name: "Grandchild C2" }, { name: "Grandchild C3" }] }
+    ]
+  };
+
+  // Actual Tree Data -- read from  CSV or JSON data source
+  //get csv data from file or API
+  const csvData = GetCSVData(); 
+  const csvDataFromFile = GetFileData('./family_tree.csv'); // Example file path (implement file reading logic in function)
+  console.log("---log results---");
+  //csvDataFromFile.then(data => console.log("CSV Data from file:", data)).catch(error => console.error("Error fetching CSV data:", error));
+
+
+  //--CSV to JSON Conversion----
+  GetFileData('./family_tree.csv').then(data => {
+    console.log(data);
+    const csvDataFromFile = data;
+    console.log(JSON.stringify(data, null, 2));
+
+    const treeData = csvToJson(csvDataFromFile); //FILE or TextCSV
+    console.log(JSON.stringify(treeData, null, 2));
+
+    //create tree call
+    const root = document.getElementById('tree-root');
+    const ul = document.createElement('ul');
+    ul.appendChild(createTree(treeData));
+    root.appendChild(ul);
+
+  //---
+});
+
+
+/*
+    const treeData = csvToJson(csvData); //console.log(treeData);
+    //create tree call
+    const root = document.getElementById('tree-root');
+    const ul = document.createElement('ul');
+    ul.appendChild(createTree(treeData));
+    root.appendChild(ul);
+
+  console.log(JSON.stringify(treeData, null, 2));
+  */
+
+  // Utility function to build tree structure in DOM
+  function createTree(node) {
+    const li = document.createElement('li');
+    const div = document.createElement('div');
+    div.className = 'node';
+    div.contentEditable = true; // Makes node dynamically editable
+    div.innerText = node.name;
+    li.appendChild(div);
+
+    if (node.children) {
+      const ul = document.createElement('ul');
+      node.children.forEach(child => ul.appendChild(createTree(child)));
+      li.appendChild(ul);
+    }
+    return li;
+  }
+
+  
+
+    //utility functions -- build tree from flat CSV data
+
+    //---------CSV to JSON Conversion---------
+    function GetCSVData() {
+        const csvData = `Parent,Child
+                        Root,Child A
+                        Root,Child B
+                        Root,Child C
+                        Child A,Grandchild A1
+                        Child A,Grandchild A2
+                        Child A,Grandchild A3
+                        Child B,Grandchild B1
+                        Child B,Grandchild B2
+                        Child B,Grandchild B3
+                        Grandchild B2,Great-Grandchild B2a
+                        Grandchild B2,Great-Grandchild B2b
+                        Grandchild B2,Great-Grandchild B2c
+                        Child C,Grandchild C1
+                        Child C,Grandchild C2
+                        Child C,Grandchild C3`;
+        return csvData;
+    }
+
+    //get csv data from file or API
+    function GetCSVDataFromFileX(filePath) {
+        // Implement file reading logic here (e.g., using fetch or FileReader)
+        // For example, using fetch:
+        // skip line 1 (header) and trim whitespace from parent/child names
+        fetch(filePath)
+            .then(response => response.text())
+            .then(csvText => {
+                // Process the CSV text to skip header and trim whitespace
+                 const result = csvText.trim().split('\n').slice(1).map(line => line.split(',').map(s => s.trim()));
+                 return result;
+            })
+            .catch(error => {return console.error('Error fetching CSV:', error)});
+    }
+
+    //get file data from file or API
+    async function GetFileData(url) {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Network error');
+
+        const contentType = response.headers.get('content-type') || '';
+        
+        if (contentType.includes('application/json') || url.endsWith('.json')) {
+          return await response.json();
+        } 
+
+        // Defaults to text for CSV and other formats
+        // Process the CSV text to skip header and trim whitespace
+        return (await response.text()).trim().split('\n').slice(1).map(line => line.split(',').map(s => s.trim()));
+
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+
+    // convert CSV to JSON tree data structure
+     function csvToJson(csv) {
+        csv = csv; console.log(csv);
+        // 1. Split lines and filter out empty rows
+        const lines = Array.isArray(csv) ? csv : csv.trim().split('\n').slice(1);
+        const map = {};
+        
+        // 2. Initialize Root specifically
+        const RootName = lines[0].toString().split(",")[0].trim();
+        const root = { name: RootName };
+        map[RootName] = root;
+
+        lines.forEach(line => { 
+            //convert object to string -> if from csv file
+            line = line.toString(); console.log(line);
+            // 3. Trim whitespace from parent/child names
+            const [parentName, childName] = line.split(',').map(s => s.trim());
+            
+            // Ensure child exists
+            if (!map[childName]) map[childName] = { name: childName };
+            
+            // Ensure parent exists in map (or handle if it's missing)
+            if (!map[parentName]) map[parentName] = { name: parentName };
+            
+            // Link them
+            if (!map[parentName].children) map[parentName].children = [];
+            map[parentName].children.push(map[childName]);
+        });
+
+        // 4. Recursive "Lean" Cleanup (removes empty arrays)
+        const clean = (node) => {
+            if (node.children && node.children.length === 0) {
+                delete node.children;
+            } else if (node.children) {
+                node.children.forEach(clean);
+            }
+        };
+        
+        clean(root); console.log(root);
+        return root;
+    }
+
+</script>
+
+</body>
+</html>
+
+
