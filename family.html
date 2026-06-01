@@ -40,13 +40,13 @@
   // Actual Tree Data -- read from  CSV or JSON data source
   //get csv data from file or API
   const csvData = GetCSVData(); 
-  const csvDataFromFile = GetFileData('./family_tree.csv'); // Example file path (implement file reading logic in function)
+  const csvDataFromFile = GetFileData('./data/family_tree.csv'); // Example file path (implement file reading logic in function)
   console.log("---log results---");
   //csvDataFromFile.then(data => console.log("CSV Data from file:", data)).catch(error => console.error("Error fetching CSV data:", error));
 
 
   //--CSV to JSON Conversion----
-  GetFileData('./family_tree.csv').then(data => {
+  GetFileData('./data/family_tree.csv').then(data => {
     console.log(data);
     const csvDataFromFile = data;
     console.log(JSON.stringify(data, null, 2));
