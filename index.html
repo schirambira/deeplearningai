@@ -36,6 +36,16 @@
         margin-top: 2px;
       }
 
+      /* Styles the label ONLY if it contains text or child elements */
+      lblerror:not(:empty) {
+        background-color: yellow;
+        border: 1px solid darkred;
+        color: red;
+        display: block;
+        padding: 5px;
+        margin-top: 20px;
+      }
+
       @media only screen and (min-width : 320px) and (max-width : 480px) {
         /*--- Mobile portrait ---*/
         div#wrapper{
@@ -73,7 +83,8 @@
         <p><a href="https://deeplearningindaba.com/2026/" target="_blank">Deep Learning Indaba 2026</a></p>
         <hr>
         <div id="file-list"></div> 
-        <label id="lblerror"></label>
+        
+        <label id="lblerror"></label> <!-- in case of errors -->
 
         <script>
 
@@ -164,8 +175,6 @@
 
         <!-- hard coded file -->
         <a href="family.html" target="_blank">Family Tree</a>
-
-        <label id="lblerror"></label>
         
       </div>
       
