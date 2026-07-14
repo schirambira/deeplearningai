@@ -145,6 +145,7 @@
                 
               } catch (error) {
                   console.error('Error fetching files:', error);
+                  document.querySelector("#lblerror").innerHtml = error;
               }
           }
 
@@ -162,6 +163,8 @@
 
         <!-- hard coded file -->
         <a href="family.html" target="_blank">Family Tree</a>
+
+        <label id="lblerror"></label>
         
       </div>
       
