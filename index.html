@@ -101,7 +101,7 @@
                             // Handle 403 Forbidden error here
                             throw new Error(`Server Details: ${response.status} - ${ await response.json().message}`); 
                           } else if (!response.ok) { 
-                            throw new Error('Network response was not ok');
+                            throw new Error(`Server Details: ${response.status} - ${ await response.json().message}`); 
                           }
                           //---------
                   const files = await response.json();
