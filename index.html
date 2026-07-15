@@ -95,12 +95,14 @@
           async function getGithubFiles() {
               try {
                   const response = await fetch(apiUrl);
-                    if (response.status === 403) {
-                      // Handle 403 Forbidden error here
-                      throw new Error('Failed to load resource: the server responded with a status of 403 (Forbidden)'); 
-                    } else if (!response.ok) { 
-                      throw new Error('Network response was not ok');
-                    }
+                          //---------Exception Handling---------
+                          if (response.status === 403) {
+                            // Handle 403 Forbidden error here
+                            throw new Error('Failed to load resource: the server responded with a status of 403 (Forbidden)'); 
+                          } else if (!response.ok) { 
+                            throw new Error('Network response was not ok');
+                          }
+                          //---------
                   const files = await response.json();
                   const listContainer = document.getElementById('file-list');
 
@@ -162,7 +164,7 @@
                 
               } catch (error) {
                   console.error('Error fetching files:', error);
-                  document.querySelector("#lblerror").innerHTML = `<span>API ACCESS ERROR :<br> ${error}</span>`;
+                  document.querySelector("#lblerror").innerHTML = `<span><b><u>API Access Error :</u></b><br> ${error}</span>`;
               }
           }
 
