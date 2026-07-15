@@ -98,7 +98,7 @@
                           //---------Exception Handling---------
                           if (response.status === 403) {
                             // Handle 403 Forbidden error here
-                            throw new Error(`Server Details: ${response.status} - ${response.Text}`); 
+                            throw new Error(`Server Details: ${response.status} - ${response.statusText}`); 
                           } else if (!response.ok) { 
                             throw new Error('Network response was not ok');
                           }
