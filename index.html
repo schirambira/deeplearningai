@@ -99,9 +99,9 @@
                           //---------Exception Handling---------
                           if (response.status === 403) {
                             // Handle 403 Forbidden error here
-                            throw new Error(`Server Details: ${response.status} - ${ await response.text()}`); 
+                            throw new Error(`Server Details: ${response.status} - ${ await response.text().message}`); 
                           } else if (!response.ok) { 
-                            throw new Error(`Server Details: ${response.status} - ${ await response.text()}`); 
+                            throw new Error(`Server Details: ${response.status} - ${ await response.text().message}`); 
                           }
                           //---------
                   const files = await response.json();
